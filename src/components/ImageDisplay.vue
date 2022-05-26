@@ -1,5 +1,9 @@
 <template>
     <div id="container">
+        <div
+            id="backdrop"
+            :style="{ backgroundImage: 'url(' + currentSource + ')' }"
+        ></div>
         <img
             id="image-main"
             :src="currentSource"
@@ -64,6 +68,7 @@ export default defineComponent({
     position: absolute;
     width: 100%;
     height: 100%;
+    overflow: hidden;
 }
 
 img {
@@ -91,5 +96,15 @@ img {
 .fade-out {
     opacity: 0 !important;
     z-index: -1 !important;
+}
+
+#backdrop {
+    position: absolute;
+    left: -5%;
+    top: -5%;
+    right: -5%;
+    bottom: -5%;
+    filter: blur(5px);
+    z-index: -2;
 }
 </style>

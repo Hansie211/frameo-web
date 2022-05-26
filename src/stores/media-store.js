@@ -1,11 +1,9 @@
 import { defineStore } from "pinia";
 
-import media from "src/data/media.json";
-
 export const useMediaStore = defineStore("MediaStore", {
     state: () => {
         return {
-            media: media,
+            media: [],
             currentIndex: -1,
         };
     },
