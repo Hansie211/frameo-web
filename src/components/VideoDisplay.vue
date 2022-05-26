@@ -19,33 +19,33 @@ import { defineComponent } from "vue";
 export default defineComponent({
     name: "VideoDisplay",
     emits: ["load"],
-    props: {
-        source: {
-            type: String,
-            default: null,
-        },
-    },
     data() {
-        return {};
+        return {
+            source: null,
+        };
+    },
+    computed: {
+        video() {
+            return this.$refs.video;
+        },
     },
     methods: {
         onVideoLoad() {
             this.$emit("load");
 
-            this.$refs.video.currentTime = 0;
-            this.$refs.video.play();
+            this.video.currentTime = 0;
+            this.video.play();
         },
         stop() {
-            this.$refs.video.pause();
-        },
-        start() {
-            const video = this.$refs.video;
+            console.log(`Stop video display`);
 
-            if (video.readyState >= 3) {
-                this.onVideoLoad();
-            } else {
-                video.load();
-            }
+            this.video.pause();
+        },
+        start(url) {
+            console.log(`Start load video ${url}`);
+
+            this.source = url;
+            this.video.load();
         },
     },
     watch: {

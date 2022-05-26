@@ -6,29 +6,21 @@ export const useMediaStore = defineStore("MediaStore", {
     state: () => {
         return {
             media: media,
-            currentIndex: 0,
+            currentIndex: -1,
         };
     },
-    getters: {
-        // {
-        //     "id": "0000-FAKE-UUID-0004",
-        //     "url": "https://filesamples.com/samples/video/mp4/sample_1280x720.mp4",
-        //     "date": "2022-05-22 12:04:00",
-        //     "is_video": true
-        // },
-    },
+    getters: {},
     actions: {
         addItems(items) {
             items.forEach((item) => {
                 const idx = this.media.findIndex((m) => m.id === item.id);
-                if (idx < 0) {
-                    this.media.push(item);
+                if (idx >= 0) {
+                    this.media[idx].url = item.url;
                     return;
                 }
 
-                if (this.media.length == 1) this.currentIndex = 0;
-
-                this.media[idx].url = item.url;
+                this.media.push(item);
+                if (this.media.length === 1) this.currentIndex = 0;
             });
         },
         removeItems(ids) {

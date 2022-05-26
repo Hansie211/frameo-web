@@ -9,7 +9,6 @@
                             'fade-in': displayImage,
                         }"
                         ref="imageDisplay"
-                        :source="imageSource"
                         @load="onMediaLoad"
                     />
                     <video-display
@@ -18,9 +17,9 @@
                             'fade-in': !displayImage,
                         }"
                         ref="videoDisplay"
-                        :source="videoSource"
                         @load="onMediaLoad"
                     />
+                    <div id="date">{{ currentDate }}</div>
                 </div>
             </div>
         </div>
@@ -38,10 +37,8 @@ export default defineComponent({
     name: "IndexPage",
     data() {
         return {
-            imageSource: "",
-            videoSource: "",
             displayImage: true,
-            timer: 0, // setInterval(() => this.mediaStore.nextIndex(), 3000),
+            mounted: false,
         };
     },
     computed: {
@@ -52,11 +49,30 @@ export default defineComponent({
             return this.mediaStore.media;
         },
         currentIndex() {
-            return this.mediaStore.currentIndex;
+            return !this.mounted ? -1 : this.mediaStore.currentIndex;
         },
         currentMedia() {
             return this.media[this.currentIndex];
         },
+        currentDate() {
+            const media = this.currentMedia;
+            if (media === undefined) return undefined;
+
+            const options = {
+                weekday: "long",
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+            };
+            const date = new Date(media.date);
+            const string = date.toLocaleDateString("nl-NL", options).toString();
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        },
+    },
+    mounted() {
+        this.mounted = true;
     },
     watch: {
         media: {
@@ -64,28 +80,39 @@ export default defineComponent({
             deep: true,
         },
         currentIndex: {
-            handler(nVal) {
+            handler(nVal, oVal) {
+                console.log(`Current Index changed from ${oVal} -> ${nVal}`);
                 if (nVal < 0) return;
 
                 const media = this.media[nVal];
                 if (media === undefined) return;
 
-                this.$refs.imageDisplay?.stop();
-                this.$refs.videoDisplay?.stop();
+                const oldMedia = this.media[oVal];
+                const change =
+                    oldMedia === undefined ||
+                    oldMedia.is_video !== media.is_video;
+
+                console.log(
+                    `Media changed from ${JSON.stringify(
+                        oldMedia
+                    )} -> ${JSON.stringify(media)}`
+                );
+
+                if (change && media.is_video) this.$refs.videoDisplay?.stop();
+
+                if (change && !media.is_video) this.$refs.imageDisplay?.stop();
 
                 this.displayImage = !media.is_video;
-
-                console.log(media);
+                console.log(`Is video: ${media.is_video}`);
 
                 if (this.displayImage) {
-                    this.imageSource = media.url;
+                    this.$refs.imageDisplay.start(media.url);
                 } else {
-                    this.videoSource = media.url;
-                    this.$refs.videoDisplay?.start();
+                    this.$refs.videoDisplay?.start(media.url);
                 }
             },
 
-            immediate: true,
+            //immediate: true,
         },
     },
     methods: {
@@ -93,12 +120,7 @@ export default defineComponent({
             this.mediaStore.nextIndex();
         },
         onMediaLoad() {
-            // const nextIdx = this.mediaStore.peekNext();
-
-            // if (this.currentMedia.is_video == this.media[nextIdx].is_video) {
             this.timer = setTimeout(() => this.nextMedia(), 4000);
-            //     return;
-            // }
         },
     },
 });
@@ -118,7 +140,7 @@ export default defineComponent({
     margin-left: auto;
     margin-right: auto;
     height: 100%;
-    width: 1500px;
+    width: 1000px;
 }
 
 .media {
@@ -133,10 +155,24 @@ export default defineComponent({
 
 .fade {
     opacity: 0;
-    transition: opacity 1s ease-in-out;
+    transition: opacity 0.5s ease-in-out;
 }
 
 .fade-in {
     opacity: 1 !important;
+}
+
+#date {
+    height: 1.5em;
+    width: 200px;
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    background-color: gray;
+    border: 2px solid purple;
+    border-radius: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>

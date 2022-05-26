@@ -1,18 +1,15 @@
 <template>
     <div id="container">
-        <div class="wrapper" id="wrapper-main">
-            <img id="image-main" ref="image-main" :src="currentSource" />
-        </div>
-        <div
-            :class="{
-                wrapper: true,
-                'fade-image': true,
-                'fade-image-in': fadeIn,
-            }"
-            id="wrapper-load"
-        >
-            <img id="image-load" @load="onImageLoad" :src="nextSource" />
-        </div>
+        <img
+            id="image-main"
+            :src="currentSource"
+            :class="{ fade: true, 'fade-out': doTransition }"
+        />
+        <!-- <img
+            id="image-load"
+            :src="transitionSource"
+            :class="{ fade: true, 'fade-in': doTransition }"
+        /> -->
     </div>
 </template>
 
@@ -22,38 +19,41 @@ import { defineComponent } from "vue";
 export default defineComponent({
     name: "ImageDisplay",
     emits: ["load"],
-    props: {
-        source: {
-            type: String,
-            default: null,
-        },
-    },
     data() {
         return {
             currentSource: "",
             nextSource: "",
-            fadeIn: false,
+            transitionSource: "",
+            doTransition: false,
         };
     },
     methods: {
         onImageLoad() {
-            this.fadeIn = true;
-            setTimeout(() => {
-                this.$emit("load");
-                this.currentSource = this.nextSource;
-                this.fadeIn = false;
-            }, 2000);
+            this.$emit("load");
+
+            this.transitionSource = this.nextSource;
+            this.doTransition = true;
+            setTimeout(this.onAfterEnter, 100);
+        },
+        onAfterEnter() {
+            const oldSource = this.currentSource;
+            this.currentSource = this.transitionSource;
+            this.transitionSource = oldSource;
+
+            this.doTransition = false;
         },
         stop() {
-            // blank
+            console.log(`Stop image display`);
+            this.currentSource = null;
         },
-    },
-    watch: {
-        source: {
-            immediate: true,
-            handler(nVal) {
-                this.nextSource = nVal;
-            },
+        start(url) {
+            console.log(`Start load image ${url}`);
+
+            const bufferImg = new Image();
+            bufferImg.onload = this.onImageLoad;
+            bufferImg.onerror = null; // TODO:
+
+            bufferImg.src = this.nextSource = url;
         },
     },
 });
@@ -66,30 +66,30 @@ export default defineComponent({
     height: 100%;
 }
 
-.wrapper {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-}
-
-#wrapper-load {
-    opacity: 0;
-    z-index: -1;
-}
-
 img {
+    position: absolute;
     width: 100%;
     height: 100%;
     object-fit: contain;
     display: block;
 }
 
-.fade-image {
-    transition: opacity 1s ease-out;
+#image-load {
+    opacity: 0;
+    z-index: -1;
 }
 
-.fade-image-in {
+.fade {
+    transition: opacity 0.1s ease-out;
+}
+
+.fade-in {
     opacity: 1 !important;
-    z-index: 1 !important;
+    z-index: 10 !important;
+}
+
+.fade-out {
+    opacity: 0 !important;
+    z-index: -1 !important;
 }
 </style>
