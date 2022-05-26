@@ -76,7 +76,6 @@ img {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    display: block;
 }
 
 #image-load {
@@ -90,7 +89,7 @@ img {
 
 .fade-in {
     opacity: 1 !important;
-    z-index: 10 !important;
+    z-index: 1 !important;
 }
 
 .fade-out {

@@ -140,7 +140,7 @@ export default defineComponent({
     margin-left: auto;
     margin-right: auto;
     height: 100%;
-    width: 1920px;
+    width: 100%;
 }
 
 .media {
@@ -174,5 +174,6 @@ export default defineComponent({
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 2;
 }
 </style>
