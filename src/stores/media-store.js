@@ -11,6 +11,8 @@ export const useMediaStore = defineStore("MediaStore", {
     actions: {
         addItems(items) {
             items.forEach((item) => {
+                // if (!item.is_video) return;
+
                 const idx = this.media.findIndex((m) => m.id === item.id);
                 if (idx >= 0) {
                     this.media[idx].url = item.url;
