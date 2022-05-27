@@ -2,6 +2,7 @@
     <q-page class="flex flex-center">
         <div id="content-pane">
             <div id="media-box">
+                <div id="click-box"></div>
                 <div class="media">
                     <image-display
                         :class="{
@@ -11,6 +12,8 @@
                         ref="imageDisplay"
                         @load="onMediaLoad"
                     />
+                </div>
+                <div class="media">
                     <video-display
                         :class="{
                             fade: true,
@@ -19,8 +22,8 @@
                         ref="videoDisplay"
                         @load="onMediaLoad"
                     />
-                    <DateBlock id="date" :value="currentMedia?.date" />
                 </div>
+                <DateBlock id="date" :value="currentMedia?.date" />
             </div>
         </div>
     </q-page>
@@ -60,10 +63,6 @@ export default defineComponent({
         this.mounted = true;
     },
     watch: {
-        media: {
-            handler(nVal) {},
-            deep: true,
-        },
         currentIndex: {
             handler(nVal, oVal) {
                 console.log(`Current Index changed from ${oVal} -> ${nVal}`);
@@ -96,8 +95,6 @@ export default defineComponent({
                     this.$refs.videoDisplay?.start(media.url);
                 }
             },
-
-            //immediate: true,
         },
     },
     methods: {
@@ -154,5 +151,15 @@ export default defineComponent({
 
     height: 1.5em;
     width: 200px;
+}
+
+#click-box {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    z-index: 5;
+    background-color: #f0f;
+    opacity: 0;
 }
 </style>
