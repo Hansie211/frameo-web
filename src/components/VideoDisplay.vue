@@ -52,10 +52,8 @@ export default defineComponent({
 
             this.loading = true;
 
-            setTimeout(() => {
-                this.source = url;
-                this.video.load();
-            }, 2000);
+            this.source = url;
+            this.video.load();
         },
     },
 });

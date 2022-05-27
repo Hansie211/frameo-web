@@ -28,7 +28,7 @@ export default defineComponent({
                 minute: "2-digit",
             };
 
-            const date = new Date(this.value);
+            const date = new Date(this.value.toString());
             const string = date.toLocaleDateString("nl-NL", options).toString();
 
             return string.charAt(0).toUpperCase() + string.slice(1);
