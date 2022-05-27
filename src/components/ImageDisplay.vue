@@ -99,11 +99,19 @@ img {
 
 #backdrop {
     position: absolute;
-    left: -5%;
-    top: -5%;
-    right: -5%;
-    bottom: -5%;
+
+    --over-size: -20%;
+    left: var(--over-size);
+    top: var(--over-size);
+    right: var(--over-size);
+    bottom: var(--over-size);
+
     filter: blur(5px);
+
     z-index: -2;
+
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 </style>
