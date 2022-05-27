@@ -102,7 +102,7 @@ export default defineComponent({
             this.mediaStore.nextIndex();
         },
         onMediaLoad() {
-            this.timer = setTimeout(() => this.nextMedia(), 4000);
+            this.timer = setTimeout(() => this.nextMedia(), 8000);
         },
     },
 });
