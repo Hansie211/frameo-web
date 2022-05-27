@@ -1,5 +1,12 @@
 <template>
     <div id="container">
+        <q-spinner
+            id="spinner"
+            v-show="loading"
+            color="primary"
+            size="3em"
+            :thickness="10"
+        />
         <video
             id="video"
             ref="video"
@@ -22,6 +29,7 @@ export default defineComponent({
     data() {
         return {
             source: null,
+            loading: false,
         };
     },
     computed: {
@@ -32,6 +40,8 @@ export default defineComponent({
     methods: {
         onVideoLoad() {
             this.$emit("load");
+
+            this.loading = false;
 
             this.video.currentTime = 0;
             this.video.play();
@@ -44,12 +54,11 @@ export default defineComponent({
         start(url) {
             console.log(`Start load video ${url}`);
 
+            this.loading = true;
+
             this.source = url;
             this.video.load();
         },
-    },
-    watch: {
-        source() {},
     },
 });
 </script>
@@ -59,6 +68,13 @@ export default defineComponent({
     position: absolute;
     width: 100%;
     height: 100%;
+}
+
+#spinner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
 }
 
 #video {
