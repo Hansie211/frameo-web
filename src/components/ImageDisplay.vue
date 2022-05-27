@@ -9,11 +9,6 @@
             :src="currentSource"
             :class="{ fade: true, 'fade-out': doTransition }"
         />
-        <!-- <img
-            id="image-load"
-            :src="transitionSource"
-            :class="{ fade: true, 'fade-in': doTransition }"
-        /> -->
     </div>
 </template>
 
@@ -71,18 +66,15 @@ export default defineComponent({
     overflow: hidden;
 }
 
-img {
+#image-main {
     position: absolute;
     width: 100%;
     height: 100%;
     object-fit: contain;
+    z-index: 1;
 }
 
-#image-load {
-    opacity: 0;
-    z-index: -1;
-}
-
+/*
 .fade {
     transition: opacity 0.1s ease-out;
 }
@@ -95,7 +87,7 @@ img {
 .fade-out {
     opacity: 0 !important;
     z-index: -1 !important;
-}
+} */
 
 #backdrop {
     position: absolute;
@@ -108,7 +100,7 @@ img {
 
     filter: blur(5px);
 
-    z-index: -2;
+    z-index: 0;
 
     background-size: cover;
     background-repeat: no-repeat;
