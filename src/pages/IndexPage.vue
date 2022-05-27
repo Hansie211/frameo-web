@@ -19,7 +19,7 @@
                         ref="videoDisplay"
                         @load="onMediaLoad"
                     />
-                    <div id="date">{{ currentDate }}</div>
+                    <DateBlock id="date" :value="currentMedia?.date" />
                 </div>
             </div>
         </div>
@@ -31,9 +31,10 @@ import ImageDisplay from "src/components/ImageDisplay.vue";
 import VideoDisplay from "src/components/VideoDisplay.vue";
 import { useMediaStore } from "src/stores/media-store";
 import { defineComponent } from "vue";
+import DateBlock from "../components/DateBlock.vue";
 
 export default defineComponent({
-    components: { ImageDisplay, VideoDisplay },
+    components: { ImageDisplay, VideoDisplay, DateBlock },
     name: "IndexPage",
     data() {
         return {
@@ -53,22 +54,6 @@ export default defineComponent({
         },
         currentMedia() {
             return this.media[this.currentIndex];
-        },
-        currentDate() {
-            const media = this.currentMedia;
-            if (media === undefined) return undefined;
-
-            const options = {
-                weekday: "long",
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-            };
-            const date = new Date(media.date);
-            const string = date.toLocaleDateString("nl-NL", options).toString();
-            return string.charAt(0).toUpperCase() + string.slice(1);
         },
     },
     mounted() {
@@ -163,17 +148,11 @@ export default defineComponent({
 }
 
 #date {
-    height: 1.5em;
-    width: 200px;
     position: absolute;
     bottom: 5px;
     left: 5px;
-    background-color: gray;
-    border: 2px solid purple;
-    border-radius: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2;
+
+    height: 1.5em;
+    width: 200px;
 }
 </style>
