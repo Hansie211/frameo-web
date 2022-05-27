@@ -14,7 +14,9 @@ function initCallback(fnAdd, fnRemove) {
         removeItems: fnRemove,
     };
 
-    // fnAdd(media);
+    if (process.env.DEV) {
+        fnAdd(media);
+    }
 }
 
 export default defineComponent({
