@@ -3,7 +3,7 @@
         <div id="spinner" v-show="loading">
             <q-spinner color="primary" size="3em" :thickness="10" />
         </div>
-        <div id="black-overlay" :v-show="hidden"></div>
+        <div id="black-overlay" :v-show="!hidden"></div>
         <video
             id="video"
             ref="video"
