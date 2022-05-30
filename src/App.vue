@@ -6,17 +6,11 @@
 import { defineComponent } from "vue";
 import { useMediaStore } from "src/stores/media-store";
 
-import media from "src/data/media.json";
-
 function initCallback(fnAdd, fnRemove) {
     window["MediaStore"] = {
         addItems: fnAdd,
         removeItems: fnRemove,
     };
-
-    if (process.env.DEV) {
-        fnAdd(media);
-    }
 }
 
 export default defineComponent({
