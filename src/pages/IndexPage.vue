@@ -23,8 +23,9 @@
                         @load="onMediaLoad"
                     />
                 </div>
-                <date-block id="date" :value="currentMedia?.date" />
             </div>
+            <date-block id="date" :value="currentMedia?.date" />
+            <version-block id="version" :value="version" />
         </div>
     </q-page>
 </template>
@@ -33,6 +34,7 @@
 import ImageDisplay from "src/components/ImageDisplay.vue";
 import VideoDisplay from "src/components/VideoDisplay.vue";
 import DateBlock from "src/components/DateBlock.vue";
+import VersionBlock from "src/components/VersionBlock.vue";
 import { useMediaStore } from "src/stores/media-store";
 import { useSettingsStore } from "src/stores/settings-store";
 import CycleManager from "src/core/CycleManager";
@@ -40,7 +42,7 @@ import CycleManager from "src/core/CycleManager";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-    components: { ImageDisplay, VideoDisplay, DateBlock },
+    components: { ImageDisplay, VideoDisplay, DateBlock, VersionBlock },
     name: "IndexPage",
     setup() {
         const mediaStore = useMediaStore();
@@ -72,6 +74,7 @@ export default defineComponent({
             mediaStore,
             cycleManager,
             settingsStore: useSettingsStore(),
+            version: "v0.1",
         };
     },
     created() {
@@ -174,6 +177,15 @@ export default defineComponent({
 
     height: 1.5em;
     width: 200px;
+}
+
+#version {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+
+    height: 1.5em;
+    width: 150px;
 }
 
 #click-box {
