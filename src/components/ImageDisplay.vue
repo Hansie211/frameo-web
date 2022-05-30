@@ -37,7 +37,11 @@ export default defineComponent({
             bufferImg.onload = this.onImageLoad;
             bufferImg.onerror = (error) => {
                 this.$emit("load");
-                alert(`Could not load image ${this.url}`);
+                alert(
+                    `Could not load image ${this.url} (${JSON.stringify(
+                        error
+                    )})`
+                );
             };
 
             bufferImg.src = this.nextSource = url;

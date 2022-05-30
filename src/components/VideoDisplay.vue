@@ -45,9 +45,11 @@ export default defineComponent({
             this.video.currentTime = 0;
             this.video.play();
         },
-        onVideoError() {
+        onVideoError(error) {
             this.$emit("load");
-            alert(`Could not load video ${this.source}`);
+            alert(
+                `Could not load video ${this.source} (${JSON.stringify(error)})`
+            );
         },
         stop() {
             console.log(`Stop video display`);
