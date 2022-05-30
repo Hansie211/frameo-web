@@ -23,7 +23,7 @@
                         @load="onMediaLoad"
                     />
                 </div>
-                <DateBlock id="date" :value="currentMedia?.date" />
+                <date-block id="date" :value="currentMedia?.date" />
             </div>
         </div>
     </q-page>
@@ -32,77 +32,100 @@
 <script>
 import ImageDisplay from "src/components/ImageDisplay.vue";
 import VideoDisplay from "src/components/VideoDisplay.vue";
+import DateBlock from "src/components/DateBlock.vue";
 import { useMediaStore } from "src/stores/media-store";
+import { useSettingsStore } from "src/stores/settings-store";
+import CycleManager from "src/core/CycleManager";
+
 import { defineComponent } from "vue";
-import DateBlock from "../components/DateBlock.vue";
 
 export default defineComponent({
     components: { ImageDisplay, VideoDisplay, DateBlock },
     name: "IndexPage",
+    setup() {
+        const mediaStore = useMediaStore();
+
+        const cycleManager = new CycleManager();
+
+        mediaStore.$onAction(({ name, store, args, after, onError }) => {
+            switch (name) {
+                case "addItem": {
+                    after((result) => {
+                        if (result === false) return;
+                        cycleManager.addOne();
+                    });
+                    break;
+                }
+
+                case "removeItem": {
+                    const index = args[0];
+                    after((result) => {
+                        if (result === false) return;
+                        cycleManager.removeIndex(index);
+                    });
+                    break;
+                }
+            }
+        });
+
+        return {
+            mediaStore,
+            cycleManager,
+            settingsStore: useSettingsStore(),
+        };
+    },
+    created() {
+        this.cycleManager.on("indexchanged", (nVal, oVal) => {
+            console.debug(`Index changed from ${oVal} -> ${nVal}`);
+            if (nVal < 0) return;
+
+            const media = this.mediaStore.mediaItems[nVal];
+            if (media === undefined) return;
+
+            const oldMedia = this.mediaStore.mediaItems[oVal];
+            const change =
+                oldMedia === undefined || oldMedia.is_video !== media.is_video;
+
+            if (change && media.is_video) this.$refs.videoDisplay?.stop();
+            if (change && !media.is_video) this.$refs.imageDisplay?.stop();
+
+            this.displayImage = !media.is_video;
+
+            if (this.displayImage) {
+                this.$refs.imageDisplay.start(media.url);
+            } else {
+                this.$refs.videoDisplay?.start(media.url);
+            }
+
+            this.currentMedia = media;
+        });
+    },
     data() {
         return {
             displayImage: true,
-            mounted: false,
+            currentMedia: null,
         };
     },
     computed: {
-        mediaStore() {
-            return useMediaStore();
+        timeout() {
+            return this.settingsStore.timeout;
         },
-        media() {
-            return this.mediaStore.media;
-        },
-        currentIndex() {
-            return !this.mounted ? -1 : this.mediaStore.currentIndex;
-        },
-        currentMedia() {
-            return this.media[this.currentIndex];
-        },
-    },
-    mounted() {
-        this.mounted = true;
     },
     watch: {
-        currentIndex: {
-            handler(nVal, oVal) {
-                console.log(`Current Index changed from ${oVal} -> ${nVal}`);
-                if (nVal < 0) return;
-
-                const media = this.media[nVal];
-                if (media === undefined) return;
-
-                const oldMedia = this.media[oVal];
-                const change =
-                    oldMedia === undefined ||
-                    oldMedia.is_video !== media.is_video;
-
-                console.log(
-                    `Media changed from ${JSON.stringify(
-                        oldMedia
-                    )} -> ${JSON.stringify(media)}`
-                );
-
-                if (change && media.is_video) this.$refs.videoDisplay?.stop();
-
-                if (change && !media.is_video) this.$refs.imageDisplay?.stop();
-
-                this.displayImage = !media.is_video;
-                console.log(`Is video: ${media.is_video}`);
-
-                if (this.displayImage) {
-                    this.$refs.imageDisplay.start(media.url);
-                } else {
-                    this.$refs.videoDisplay?.start(media.url);
-                }
-            },
+        "mediaStore.count"(nVal, oVal) {
+            const diff = nVal - oVal;
+            if (diff < 0) {
+                // less items
+                return;
+            }
         },
     },
     methods: {
         nextMedia() {
-            this.mediaStore.nextIndex();
+            this.cycleManager.popIndex();
         },
         onMediaLoad() {
-            this.timer = setTimeout(() => this.nextMedia(), 8000);
+            this.timer = setTimeout(() => this.nextMedia(), this.timeout);
         },
     },
 });
