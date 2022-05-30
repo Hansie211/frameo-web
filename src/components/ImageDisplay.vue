@@ -4,11 +4,7 @@
             id="backdrop"
             :style="{ backgroundImage: 'url(' + currentSource + ')' }"
         ></div>
-        <img
-            id="image-main"
-            :src="currentSource"
-            :class="{ fade: true, 'fade-out': doTransition }"
-        />
+        <img id="image-main" :src="currentSource" />
     </div>
 </template>
 
@@ -22,24 +18,13 @@ export default defineComponent({
         return {
             currentSource: "",
             nextSource: "",
-            transitionSource: "",
-            doTransition: false,
         };
     },
     methods: {
         onImageLoad() {
             this.$emit("load");
 
-            this.transitionSource = this.nextSource;
-            this.doTransition = true;
-            setTimeout(this.onAfterEnter, 100);
-        },
-        onAfterEnter() {
-            const oldSource = this.currentSource;
-            this.currentSource = this.transitionSource;
-            this.transitionSource = oldSource;
-
-            this.doTransition = false;
+            this.currentSource = this.nextSource;
         },
         stop() {
             console.log(`Stop image display`);
@@ -50,7 +35,10 @@ export default defineComponent({
 
             const bufferImg = new Image();
             bufferImg.onload = this.onImageLoad;
-            bufferImg.onerror = null; // TODO:
+            bufferImg.onerror = (error) => {
+                console.error("Failed to load image:", error);
+                this.$emit("load");
+            };
 
             bufferImg.src = this.nextSource = url;
         },
@@ -73,21 +61,6 @@ export default defineComponent({
     object-fit: contain;
     z-index: 1;
 }
-
-/*
-.fade {
-    transition: opacity 0.1s ease-out;
-}
-
-.fade-in {
-    opacity: 1 !important;
-    z-index: 1 !important;
-}
-
-.fade-out {
-    opacity: 0 !important;
-    z-index: -1 !important;
-} */
 
 #backdrop {
     position: absolute;
