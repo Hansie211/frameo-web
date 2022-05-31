@@ -3,7 +3,6 @@
         <div id="spinner" v-show="loading">
             <q-spinner color="primary" size="3em" :thickness="10" />
         </div>
-        <div id="black-overlay" :v-show="!hidden"></div>
         <video id="video" ref="video" muted autoplay loop @loadeddata="onVideoLoad" @error="onVideoError">
             <source v-if="source !== null" :src="source" type="video/mp4" />
         </video>
@@ -20,7 +19,6 @@ export default defineComponent({
         return {
             source: null,
             loading: false,
-            hidden: true,
         };
     },
     computed: {
@@ -44,7 +42,6 @@ export default defineComponent({
             console.log(`Stop video display`);
 
             this.video.pause();
-            this.hidden = true;
         },
         start(url) {
             console.log(`Start load video ${url}`);
@@ -53,8 +50,6 @@ export default defineComponent({
 
             this.source = url;
             this.video.load();
-
-            this.hidden = false;
         },
     },
 });
@@ -78,14 +73,6 @@ export default defineComponent({
 #spinner > * {
     height: 100%;
     width: 100%;
-}
-
-#black-overlay {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: 2;
-    background-color: black;
 }
 
 #video {
