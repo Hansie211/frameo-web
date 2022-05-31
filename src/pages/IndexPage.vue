@@ -135,7 +135,11 @@ export default defineComponent({
             const name = !this.currentMedia ? "?" : this.currentMedia.is_video ? "video" : "image";
             const source = this.currentMedia.source ?? "?";
 
-            alert(`Could not load ${name} from source ${source} (${JSON.stringify(error)})`);
+            const mediaDetails = !this.currentMedia ? "{null}" : JSON.stringify(this.currentMedia);
+
+            console.error(
+                `Could not load ${name} from source ${source}\n\n(${JSON.stringify(error)})\n\n${mediaDetails}`
+            );
 
             this.nextMedia();
         },
