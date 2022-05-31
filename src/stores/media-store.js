@@ -1,5 +1,15 @@
 import { defineStore } from "pinia";
 
+function findIndex(item, array) {
+    for (var i = array.length - 1; i > -1; i--) {
+        const current = array[i];
+
+        if (current.date < item.date) return i;
+    }
+
+    return 0;
+}
+
 export const useMediaStore = defineStore("MediaStore", {
     state: () => {
         return {
@@ -31,13 +41,15 @@ export const useMediaStore = defineStore("MediaStore", {
                 return;
             }
 
-            const idx = this.mediaItems.findIndex((m) => m.id === item.id);
-            if (idx >= 0) {
-                this.updateItem(this.mediaItems[idx], item);
+            const index = this.mediaItems.findIndex((m) => m.id === item.id);
+            if (index >= 0) {
+                this.updateItem(this.mediaItems[index], item);
                 return false;
             }
 
-            this.mediaItems.push(item);
+            const itemIndex = findIndex(item, this.mediaItems);
+            this.mediaItems.splice(itemIndex, 0, item);
+
             return true;
         },
         addItems(items) {
