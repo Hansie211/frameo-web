@@ -117,7 +117,7 @@ export default defineComponent({
             return this.settingsStore["timeout"];
         },
         cutoffVideo() {
-            return this.settingsStore["cutoff-video"];
+            return this.settingsStore["cutoffVideo"];
         },
     },
     watch: {
@@ -142,10 +142,12 @@ export default defineComponent({
             this.nextMedia();
         },
         onMediaError(error) {
-            const name = !this.currentMedia ? "?" : this.currentMedia.is_video ? "video" : "image";
-            const source = this.currentMedia.source ?? "?";
+            const media = this.currentMedia;
 
-            const mediaDetails = !this.currentMedia ? "{null}" : JSON.stringify(this.currentMedia);
+            const name = !media ? "?" : media.is_video ? "video" : "image";
+            const source = media.url ?? "?";
+
+            const mediaDetails = !media ? "{null}" : JSON.stringify(media);
 
             console.error(`Could not load ${name} from source ${source}\n\n(${JSON.stringify(error)})\n\n${mediaDetails}`);
 
