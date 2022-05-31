@@ -5,10 +5,9 @@
             <div class="nail"></div>
         </div>
         <div id="content">
-            <div id="month-name" class="text">{{ monthName }}</div>
-            <div id="day" class="text">{{ day }}</div>
-            <div id="day-name" class="text">{{ dayName }}</div>
-            <div id="year" class="text">{{ year }}</div>
+            <div class="text">{{ dayName }}</div>
+            <div class="text">{{ day }} {{ monthName }} {{ year }}</div>
+            <div class="text">{{ hour }}:{{ minute }}</div>
         </div>
     </div>
 </template>
@@ -18,6 +17,23 @@ import { defineComponent } from "vue";
 
 function pad(n) {
     return n < 10 ? "0" + n : n;
+}
+
+function capitel(string) {
+    return string?.charAt(0).toUpperCase() + string?.slice(1);
+}
+
+/**
+ * @param {String} string
+ * @param {String} toremove
+ * @returns {String}
+ */
+function stripEnd(string, toremove) {
+    if (string === undefined) return undefined;
+    while (string.length > 0 && toremove.includes(string.charAt(string.length - 1))) {
+        string = string.slice(0, -1);
+    }
+    return string;
 }
 
 const localization = "nl-NL";
@@ -33,31 +49,30 @@ export default defineComponent({
     computed: {
         /** @type {Date} */
         date() {
-            return new Date(this.value.toString());
+            return this.value === null ? null : new Date(this.value.toString());
         },
         year() {
-            return this.date.getFullYear();
+            return this.date?.getFullYear();
         },
         month() {
-            return pad(this.date.getMonth() + 1);
+            return pad(this.date?.getMonth() + 1);
         },
         day() {
-            return pad(this.date.getDate());
+            return this.date?.getDate();
         },
         hour() {
-            return pad(this.date.getHours());
+            return pad(this.date?.getHours());
         },
         minute() {
-            return pad(this.date.getMinutes());
+            return pad(this.date?.getMinutes());
         },
         monthName() {
-            return "September";
             const options = { month: "short" };
-            return this.date.toLocaleDateString(localization, options).toString();
+            return stripEnd(this.date?.toLocaleDateString(localization, options).toString(), ".");
         },
         dayName() {
             const options = { weekday: "long" };
-            return this.date.toLocaleDateString(localization, options).toString();
+            return capitel(this.date?.toLocaleDateString(localization, options).toString());
         },
         text() {
             if (this.value === null) return null;
@@ -139,9 +154,9 @@ export default defineComponent({
     display: flex;
     flex-direction: column;
 
-    height: 5em;
-    width: 70px;
+    height: 4.5em;
+    width: 110px;
 
-    opacity: 0.4;
+    opacity: 0.8;
 }
 </style>

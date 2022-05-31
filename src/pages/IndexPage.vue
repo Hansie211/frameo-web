@@ -26,8 +26,7 @@
                     />
                 </div>
             </div>
-            <date-block id="date" :value="new Date()" />
-            <!-- currentMedia?.date -->
+            <date-block id="date" :value="currentMedia?.date" />
             <version-block id="version" :value="version" />
         </div>
     </q-page>
