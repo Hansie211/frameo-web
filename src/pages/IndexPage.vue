@@ -40,6 +40,7 @@ import VersionBlock from "src/components/VersionBlock.vue";
 import { useMediaStore } from "src/stores/media-store";
 import { useSettingsStore } from "src/stores/settings-store";
 import CycleManager from "src/core/CycleManager";
+import VERSION from "src/core/Version";
 
 import { defineComponent } from "vue";
 
@@ -76,7 +77,7 @@ export default defineComponent({
             mediaStore,
             cycleManager,
             settingsStore: useSettingsStore(),
-            version: "v0.1.3",
+            version: VERSION.asString(),
         };
     },
     created() {
