@@ -15,7 +15,7 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
     name: "VideoDisplay",
-    emits: ["load", error],
+    emits: ["load", "error"],
     data() {
         return {
             source: null,
