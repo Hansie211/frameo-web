@@ -1,10 +1,6 @@
 <template>
     <div id="container">
-        <div
-            id="backdrop"
-            :style="{ backgroundImage: 'url(' + currentSource + ')' }"
-            v-if="currentSource !== null"
-        ></div>
+        <div id="backdrop" :style="{ backgroundImage: 'url(' + currentSource + ')' }" v-if="currentSource !== null"></div>
         <img id="image-main" :src="currentSource" v-if="currentSource !== null" />
     </div>
 </template>

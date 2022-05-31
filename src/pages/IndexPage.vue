@@ -23,6 +23,7 @@
                         ref="videoDisplay"
                         @load="onMediaLoad"
                         @error="onMediaError"
+                        @end="onMediaEnd"
                     />
                 </div>
             </div>
@@ -113,7 +114,10 @@ export default defineComponent({
     },
     computed: {
         timeout() {
-            return this.settingsStore.timeout;
+            return this.settingsStore["timeout"];
+        },
+        cutoffVideo() {
+            return this.settingsStore["cutoff-video"];
         },
     },
     watch: {
@@ -130,7 +134,12 @@ export default defineComponent({
             this.cycleManager.popIndex();
         },
         onMediaLoad() {
+            if (this.currentMedia?.is_video === true && !this.cutoffVideo) return;
             this.timer = setTimeout(() => this.nextMedia(), this.timeout);
+        },
+        onMediaEnd() {
+            clearTimeout(this.timer);
+            this.nextMedia();
         },
         onMediaError(error) {
             const name = !this.currentMedia ? "?" : this.currentMedia.is_video ? "video" : "image";
@@ -138,9 +147,7 @@ export default defineComponent({
 
             const mediaDetails = !this.currentMedia ? "{null}" : JSON.stringify(this.currentMedia);
 
-            console.error(
-                `Could not load ${name} from source ${source}\n\n(${JSON.stringify(error)})\n\n${mediaDetails}`
-            );
+            console.error(`Could not load ${name} from source ${source}\n\n(${JSON.stringify(error)})\n\n${mediaDetails}`);
 
             this.nextMedia();
         },

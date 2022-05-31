@@ -3,7 +3,7 @@
         <div id="spinner" v-show="loading">
             <q-spinner color="primary" size="3em" :thickness="10" />
         </div>
-        <video id="video" ref="video" muted autoplay loop @loadeddata="onVideoLoad" @error="onVideoError">
+        <video id="video" ref="video" muted autoplay @loadeddata="onVideoLoad" @error="onVideoError" @ended="onVideoEnd">
             <source v-if="source !== null" :src="source" type="video/mp4" />
         </video>
     </div>
@@ -14,7 +14,7 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
     name: "VideoDisplay",
-    emits: ["load", "error"],
+    emits: ["load", "error", "end"],
     data() {
         return {
             source: null,
@@ -37,6 +37,9 @@ export default defineComponent({
         },
         onVideoError(error) {
             this.$emit("error", error);
+        },
+        onVideoEnd() {
+            this.$emit("end");
         },
         stop() {
             this.video.pause();
