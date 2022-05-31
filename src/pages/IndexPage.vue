@@ -76,7 +76,7 @@ export default defineComponent({
             mediaStore,
             cycleManager,
             settingsStore: useSettingsStore(),
-            version: "v0.1.2",
+            version: "v0.1.3",
         };
     },
     created() {
