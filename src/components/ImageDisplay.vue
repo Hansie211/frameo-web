@@ -1,7 +1,11 @@
 <template>
     <div id="container">
-        <div id="backdrop" :style="{ backgroundImage: 'url(' + currentSource + ')' }"></div>
-        <img id="image-main" :src="currentSource" />
+        <div
+            id="backdrop"
+            :style="{ backgroundImage: 'url(' + currentSource + ')' }"
+            v-if="currentSource !== null"
+        ></div>
+        <img id="image-main" :src="currentSource" v-if="currentSource !== null" />
     </div>
 </template>
 
@@ -13,7 +17,7 @@ export default defineComponent({
     emits: ["load", "error"],
     data() {
         return {
-            currentSource: "",
+            currentSource: null,
             nextSource: "",
         };
     },
@@ -24,7 +28,6 @@ export default defineComponent({
             this.currentSource = this.nextSource;
         },
         stop() {
-            console.log(`Stop image display`);
             this.currentSource = null;
         },
         start(url) {

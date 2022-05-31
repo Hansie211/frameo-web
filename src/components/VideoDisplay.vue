@@ -39,8 +39,6 @@ export default defineComponent({
             this.$emit("error", error);
         },
         stop() {
-            console.log(`Stop video display`);
-
             this.video.pause();
         },
         start(url) {
