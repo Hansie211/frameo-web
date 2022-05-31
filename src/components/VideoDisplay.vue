@@ -4,15 +4,7 @@
             <q-spinner color="primary" size="3em" :thickness="10" />
         </div>
         <div id="black-overlay" :v-show="!hidden"></div>
-        <video
-            id="video"
-            ref="video"
-            muted
-            autoplay
-            loop
-            @loadeddata="onVideoLoad"
-            @error="onVideoError"
-        >
+        <video id="video" ref="video" muted autoplay loop @loadeddata="onVideoLoad" @error="onVideoError">
             <source v-if="source !== null" :src="source" type="video/mp4" />
         </video>
     </div>
@@ -23,7 +15,7 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
     name: "VideoDisplay",
-    emits: ["load"],
+    emits: ["load", error],
     data() {
         return {
             source: null,
@@ -46,10 +38,7 @@ export default defineComponent({
             this.video.play();
         },
         onVideoError(error) {
-            this.$emit("load");
-            alert(
-                `Could not load video ${this.source} (${JSON.stringify(error)})`
-            );
+            this.$emit("error", error);
         },
         stop() {
             console.log(`Stop video display`);

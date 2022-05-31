@@ -11,6 +11,7 @@
                         }"
                         ref="imageDisplay"
                         @load="onMediaLoad"
+                        @error="onMediaError"
                     />
                 </div>
                 <div class="media">
@@ -21,6 +22,7 @@
                         }"
                         ref="videoDisplay"
                         @load="onMediaLoad"
+                        @error="onMediaError"
                     />
                 </div>
             </div>
@@ -86,8 +88,7 @@ export default defineComponent({
             if (media === undefined) return;
 
             const oldMedia = this.mediaStore.mediaItems[oVal];
-            const change =
-                oldMedia === undefined || oldMedia.is_video !== media.is_video;
+            const change = oldMedia === undefined || oldMedia.is_video !== media.is_video;
 
             if (change && media.is_video) this.$refs.videoDisplay?.stop();
             if (change && !media.is_video) this.$refs.imageDisplay?.stop();
@@ -129,6 +130,14 @@ export default defineComponent({
         },
         onMediaLoad() {
             this.timer = setTimeout(() => this.nextMedia(), this.timeout);
+        },
+        onMediaError(error) {
+            const name = !this.currentMedia ? "?" : this.currentMedia.is_video ? "video" : "image";
+            const source = this.currentMedia.source ?? "?";
+
+            alert(`Could not load ${name} from source ${source} (${JSON.stringify(error)})`);
+
+            this.nextMedia();
         },
     },
 });

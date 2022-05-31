@@ -1,9 +1,6 @@
 <template>
     <div id="container">
-        <div
-            id="backdrop"
-            :style="{ backgroundImage: 'url(' + currentSource + ')' }"
-        ></div>
+        <div id="backdrop" :style="{ backgroundImage: 'url(' + currentSource + ')' }"></div>
         <img id="image-main" :src="currentSource" />
     </div>
 </template>
@@ -13,7 +10,7 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
     name: "ImageDisplay",
-    emits: ["load"],
+    emits: ["load", "error"],
     data() {
         return {
             currentSource: "",
@@ -36,12 +33,7 @@ export default defineComponent({
             const bufferImg = new Image();
             bufferImg.onload = this.onImageLoad;
             bufferImg.onerror = (error) => {
-                this.$emit("load");
-                alert(
-                    `Could not load image ${this.url} (${JSON.stringify(
-                        error
-                    )})`
-                );
+                this.$emit("error", error);
             };
 
             bufferImg.src = this.nextSource = url;
