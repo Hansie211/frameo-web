@@ -31,13 +31,11 @@ export default defineComponent({
     height: 100%;
 
     z-index: 5;
-    opacity: 0.3;
+    opacity: 0;
 }
 
 .clickbox {
     height: 100%;
-    background-color: green;
-    opacity: 0.5;
 
     width: 150px;
 }
