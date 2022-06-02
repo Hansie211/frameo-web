@@ -27,7 +27,10 @@
                     />
                 </div>
             </div>
-            <date-block id="date" :value="currentMedia?.date" />
+            <div id="info-box">
+                <date-block id="date" :value="currentMedia?.date" />
+                <progress-block id="progress" :current="cycleManager.getIndex()" :max="cycleManager.getMax()" />
+            </div>
             <version-block id="version" :value="version" />
         </div>
     </q-page>
@@ -37,6 +40,7 @@
 import ImageDisplay from "src/components/ImageDisplay.vue";
 import VideoDisplay from "src/components/VideoDisplay.vue";
 import DateBlock from "src/components/DateBlock.vue";
+import ProgressBlock from "src/components/ProgressBlock.vue";
 import VersionBlock from "src/components/VersionBlock.vue";
 import { useMediaStore } from "src/stores/media-store";
 import { useSettingsStore } from "src/stores/settings-store";
@@ -46,7 +50,7 @@ import VERSION from "src/core/Version";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-    components: { ImageDisplay, VideoDisplay, DateBlock, VersionBlock },
+    components: { ImageDisplay, VideoDisplay, DateBlock, VersionBlock, ProgressBlock },
     name: "IndexPage",
     setup() {
         const mediaStore = useMediaStore();
@@ -192,13 +196,19 @@ export default defineComponent({
 .fade-in {
     opacity: 1 !important;
 }
+#progress {
+    margin-top: 2px;
+}
 
-#date {
+#info-box {
     position: absolute;
     bottom: 5px;
     left: 5px;
 
     z-index: 2;
+
+    display: flex;
+    flex-direction: column;
 }
 
 #version {
