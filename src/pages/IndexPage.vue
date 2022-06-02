@@ -140,6 +140,8 @@ export default defineComponent({
         },
         onMediaLoad() {
             if (this.currentMedia?.is_video === true && !this.cutoffVideo) return;
+            clearTimeout(this.timer);
+
             this.timer = setTimeout(() => this.nextMedia(), this.timeout);
         },
         onMediaEnd() {
