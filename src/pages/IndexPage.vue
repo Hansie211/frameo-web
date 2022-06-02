@@ -1,8 +1,8 @@
 <template>
     <q-page class="flex flex-center">
         <div id="content-pane">
+            <user-actions @next="onClickNext" @previous="onClickPrevious" />
             <div id="media-box">
-                <div id="click-box"></div>
                 <div class="media">
                     <image-display
                         :class="{
@@ -42,6 +42,7 @@ import VideoDisplay from "src/components/VideoDisplay.vue";
 import DateBlock from "src/components/DateBlock.vue";
 import ProgressBlock from "src/components/ProgressBlock.vue";
 import VersionBlock from "src/components/VersionBlock.vue";
+import UserActions from "src/components/UserActions.vue";
 import { useMediaStore } from "src/stores/media-store";
 import { useSettingsStore } from "src/stores/settings-store";
 import CycleManager from "src/core/CycleManager";
@@ -50,7 +51,7 @@ import VERSION from "src/core/Version";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-    components: { ImageDisplay, VideoDisplay, DateBlock, VersionBlock, ProgressBlock },
+    components: { ImageDisplay, VideoDisplay, DateBlock, VersionBlock, ProgressBlock, UserActions },
     name: "IndexPage",
     setup() {
         const mediaStore = useMediaStore();
@@ -134,8 +135,8 @@ export default defineComponent({
         },
     },
     methods: {
-        nextMedia() {
-            this.cycleManager.popIndex();
+        nextMedia(count = 1) {
+            this.cycleManager.popIndex(count);
         },
         onMediaLoad() {
             if (this.currentMedia?.is_video === true && !this.cutoffVideo) return;
@@ -156,6 +157,42 @@ export default defineComponent({
             console.error(`Could not load ${name} from source ${source}\n\n(${JSON.stringify(error)})\n\n${mediaDetails}`);
 
             this.nextMedia();
+        },
+
+        onClickNext(clicks) {
+            clearTimeout(this.timer);
+
+            switch (clicks) {
+                case 1:
+                    this.nextMedia(1);
+                    break;
+                case 2:
+                    this.nextMedia(5);
+                    break;
+                case 3:
+                    this.nextMedia(10);
+                    break;
+                default:
+                    this.nextMedia(1);
+            }
+        },
+
+        onClickPrevious(clicks) {
+            clearTimeout(this.timer);
+
+            switch (clicks) {
+                case 1:
+                    this.nextMedia(-1);
+                    break;
+                case 2:
+                    this.nextMedia(-5);
+                    break;
+                case 3:
+                    this.nextMedia(-10);
+                    break;
+                default:
+                    this.nextMedia(-1);
+            }
         },
     },
 });
@@ -218,15 +255,5 @@ export default defineComponent({
 
     height: 1.5em;
     width: 150px;
-}
-
-#click-box {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-
-    z-index: 5;
-    background-color: #f0f;
-    opacity: 0;
 }
 </style>

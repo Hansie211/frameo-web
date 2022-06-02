@@ -24,12 +24,10 @@ export default class CycleManager extends EventEmitter {
     }
 
     peekIndex(count = 1) {
-        if (typeof count !== "number")
-            throw new Error("Cannot read count as number");
-        if (count < 1) throw new Error("Cannot peek with less than 1");
+        if (typeof count !== "number") throw new Error("Cannot read count as number");
         if (this.getMax() === 0) return -1;
 
-        return (this.getIndex() + count) % this.getMax();
+        return (this.getIndex() + count + this.getMax()) % this.getMax();
     }
 
     popIndex(count = 1) {
