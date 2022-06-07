@@ -24,6 +24,9 @@ export const useMediaStore = defineStore("MediaStore", {
     actions: {
         updateItem(storeItem, item) {
             storeItem.url = item.url;
+            storeItem.description = item.description;
+            storeItem.contributer = item.contributer;
+            storeItem.record_at = item.record_at;
         },
         addItem(item) {
             if (!item) {
