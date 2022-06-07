@@ -31,6 +31,11 @@
                 <date-block id="date" :value="currentMedia?.date" />
                 <progress-block id="progress" :current="cycleManager.getIndex()" :max="cycleManager.getMax()" />
             </div>
+            <div id="uploader-box">
+                <contributer-block id="contributer" :name="currentMedia?.contributer" />
+                <div class="gap" v-if="currentMedia?.contributer && currentMedia?.description"></div>
+                <description-block id="description" :value="currentMedia?.description" />
+            </div>
             <version-block id="version" :value="version" />
         </div>
     </q-page>
@@ -42,6 +47,8 @@ import VideoDisplay from "src/components/VideoDisplay.vue";
 import DateBlock from "src/components/DateBlock.vue";
 import ProgressBlock from "src/components/ProgressBlock.vue";
 import VersionBlock from "src/components/VersionBlock.vue";
+import ContributerBlock from "src/components/ContributerBlock.vue";
+import DescriptionBlock from "src/components/DescriptionBlock.vue";
 import UserActions from "src/components/UserActions.vue";
 import { useMediaStore } from "src/stores/media-store";
 import { useSettingsStore } from "src/stores/settings-store";
@@ -51,7 +58,7 @@ import VERSION from "src/core/Version";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-    components: { ImageDisplay, VideoDisplay, DateBlock, VersionBlock, ProgressBlock, UserActions },
+    components: { ImageDisplay, VideoDisplay, DateBlock, VersionBlock, ProgressBlock, UserActions, ContributerBlock, DescriptionBlock },
     name: "IndexPage",
     setup() {
         const mediaStore = useMediaStore();
@@ -248,6 +255,23 @@ export default defineComponent({
 
     display: flex;
     flex-direction: column;
+}
+
+#uploader-box {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+}
+
+#uploader-box > .gap {
+    height: 5px;
+    flex-grow: 0;
+    flex-shrink: 0;
 }
 
 #version {
