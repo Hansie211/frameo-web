@@ -33,5 +33,7 @@ export default defineComponent({
 
     padding: 1px 5px;
     max-width: 400px;
+
+    align-self: flex-end;
 }
 </style>
