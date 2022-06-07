@@ -11,7 +11,7 @@ export default defineComponent({
     props: {
         timeout: {
             type: Number,
-            default: 500,
+            default: 300,
         },
         max: {
             type: Number,
@@ -26,7 +26,6 @@ export default defineComponent({
     },
     methods: {
         onClick() {
-            console.log("CLICK");
             clearInterval(this.timer);
 
             this.clicks++;
@@ -39,7 +38,6 @@ export default defineComponent({
         },
 
         fire() {
-            console.log("FIRE");
             const clicks = this.clicks;
             this.clicks = 0;
 
