@@ -66,7 +66,7 @@ export default defineComponent({
     right: var(--over-size);
     bottom: var(--over-size);
 
-    filter: blur(5px);
+    filter: blur(10px);
 
     z-index: 0;
 
