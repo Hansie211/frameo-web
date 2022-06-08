@@ -1,5 +1,6 @@
 <template>
     <div id="description" v-if="value != null && value !== ''">
+        <div id="background"></div>
         {{ value }}
     </div>
 </template>
@@ -20,20 +21,30 @@ export default defineComponent({
 
 <style scoped>
 #description {
-    background-color: rgba(0, 0, 0, 0.6);
+    position: relative;
 
     display: flex;
     justify-content: center;
     align-items: center;
 
-    font-size: 0.9em;
+    font-size: 1.2em;
     font-weight: bold;
     color: white;
-    opacity: 0.5;
 
-    padding: 1px 5px;
+    padding: 2px 10px;
     max-width: 400px;
 
     align-self: flex-end;
+}
+
+#background {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+
+    background-color: black;
+    opacity: 0.6;
+
+    z-index: -1;
 }
 </style>

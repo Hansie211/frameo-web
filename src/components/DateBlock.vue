@@ -1,5 +1,6 @@
 <template>
     <div id="date">
+        <div id="background"></div>
         <div id="nailbar">
             <div class="nail"></div>
             <div class="nail"></div>
@@ -97,8 +98,8 @@ export default defineComponent({
 
 <style scoped>
 @font-face {
-    font-family: CutiveMono;
-    src: url(../css/fonts/CutiveMono.ttf);
+    font-family: Montserrat;
+    src: url(../css/fonts/Montserrat.ttf);
 }
 
 #nailbar {
@@ -123,13 +124,23 @@ export default defineComponent({
 #content {
     display: flex;
     flex-direction: column;
+    padding: 2px 1em;
+}
+
+#background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    z-index: -1;
+    background-color: #fff;
+    opacity: 0.8;
 }
 
 .text {
     text-align: center;
     width: 100%;
-    font-family: "CutiveMono";
-    height: 1.1em;
+    font-family: "Montserrat";
 }
 
 #month-name,
@@ -148,15 +159,9 @@ export default defineComponent({
 }
 
 #date {
-    background-color: white;
-    border-bottom: 3px solid gray;
+    position: relative;
 
     display: flex;
     flex-direction: column;
-
-    height: 4.5em;
-    width: 110px;
-
-    opacity: 0.8;
 }
 </style>
