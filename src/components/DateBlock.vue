@@ -141,21 +141,7 @@ export default defineComponent({
     text-align: center;
     width: 100%;
     font-family: "Montserrat";
-}
-
-#month-name,
-#day-name {
-    text-transform: uppercase;
-    font-size: 0.8em;
-}
-
-#day {
-    font-size: 1.2em;
-    font-weight: bold;
-}
-
-#year {
-    font-size: 0.6em;
+    font-size: 0.9em;
 }
 
 #date {
