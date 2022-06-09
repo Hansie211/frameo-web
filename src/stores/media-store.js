@@ -1,10 +1,10 @@
 import { defineStore } from "pinia";
 
-function findIndex(item, array) {
+function findSortedPosition(item, array) {
     for (var i = array.length - 1; i > -1; i--) {
         const current = array[i];
 
-        if (current.date < item.date) return i;
+        if (current.date < item.date) return i + 1;
     }
 
     return 0;
@@ -50,7 +50,9 @@ export const useMediaStore = defineStore("MediaStore", {
                 return false;
             }
 
-            const itemIndex = findIndex(item, this.mediaItems);
+            item.date = new Date(item.date);
+
+            const itemIndex = findSortedPosition(item, this.mediaItems);
             this.mediaItems.splice(itemIndex, 0, item);
 
             return true;
