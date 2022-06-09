@@ -11,7 +11,7 @@ export default defineComponent({
     props: {
         timeout: {
             type: Number,
-            default: 300,
+            default: 250,
         },
         max: {
             type: Number,
