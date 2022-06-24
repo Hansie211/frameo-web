@@ -2,6 +2,7 @@
     <div id="block">
         <click-box class="clickbox" id="previous" @click="onClickPrevious" />
         <click-box class="clickbox" id="next" @click="onClickNext" />
+        <div id="swipebox" v-touch-swipe.mouse.right.left="handleSwipe"></div>
     </div>
 </template>
 
@@ -20,6 +21,18 @@ export default defineComponent({
         onClickNext(clicks) {
             this.$emit("next", clicks);
         },
+        handleSwipe(e) {
+            if (e.direction === "left") {
+                this.$emit("next", 1);
+                return;
+            }
+            if (e.direction === "right") {
+                this.$emit("previous", 1);
+                return;
+            }
+
+            //console.log(e.direction);
+        },
     },
 });
 </script>
@@ -35,16 +48,25 @@ export default defineComponent({
 }
 
 .clickbox {
+    position: absolute;
     height: 100%;
+    width: 15%;
+    top: 0;
+}
 
-    width: 150px;
+#swipebox {
+    height: 100%;
+    width: 65%;
+
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #previous {
-    float: left;
+    left: 0;
 }
 
 #next {
-    float: right;
+    right: 0;
 }
 </style>
